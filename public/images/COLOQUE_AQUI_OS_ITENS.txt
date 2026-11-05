@@ -1,0 +1,1 @@
+Adicione sword.png e healing-item.png. heart.png é opcional; sem ele o site desenha o coração com ícone vetorial.

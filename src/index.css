@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "DM Sans", sans-serif;
+  color: #edf7ff;
+  background: #080a0e;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: #080a0e; }
+button, a { -webkit-tap-highlight-color: transparent; }
+::selection { background: #75dfff; color: #080a0e; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}
+.pixel { font-family: "Press Start 2P", monospace; }
+.section-wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+.dark-grid {
+  background-image: linear-gradient(rgba(135,205,235,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(135,205,235,.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+.glass { background: rgba(14, 23, 33, .72); border: 1px solid rgba(166, 224, 246, .14); backdrop-filter: blur(16px); }
+.pixel-art { image-rendering: pixelated; image-rendering: crisp-edges; }
+.float-slow { animation: item-float 3.6s ease-in-out infinite; }
+.float-sword { animation: item-float 4.4s ease-in-out infinite reverse; }
+.float-heart { animation: item-float 3.1s ease-in-out infinite; }
+.float-healing { animation: item-float 4s ease-in-out infinite .35s; }
+@keyframes item-float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-9px) rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-slow, .float-sword, .float-heart, .float-healing { animation: none; }
+}
