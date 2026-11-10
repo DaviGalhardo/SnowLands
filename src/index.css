@@ -28,10 +28,32 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .float-sword { animation: item-float 4.4s ease-in-out infinite reverse; }
 .float-heart { animation: item-float 3.1s ease-in-out infinite; }
 .float-healing { animation: item-float 4s ease-in-out infinite .35s; }
+.download-page { color: #edf7ff; }
+.download-hero { background: linear-gradient(145deg, #080a0e 0%, #0b1420 58%, #080a0e 100%); }
+.download-orb { animation: orb-pulse 7s ease-in-out infinite; }
+.snowflake { position: absolute; top: -12px; display: block; border-radius: 2px; background: rgba(195, 241, 255, .72); box-shadow: 0 0 9px rgba(104, 224, 255, .65); animation: snow-fall linear infinite; }
+.pixel-spark { position: absolute; z-index: 20; font-size: 1.7rem; animation: spark-blink 2.8s ease-in-out infinite; }
+.download-button, .game-art-card, .download-card { will-change: transform; }
+.download-card { box-shadow: 0 25px 80px rgba(0, 0, 0, .24), 0 0 60px rgba(44, 190, 235, .06); }
 @keyframes item-float {
   0%, 100% { transform: translateY(0) rotate(-2deg); }
   50% { transform: translateY(-9px) rotate(2deg); }
 }
+@keyframes snow-fall {
+  0% { transform: translate3d(0, -20px, 0) rotate(0); opacity: 0; }
+  12% { opacity: .8; }
+  88% { opacity: .45; }
+  100% { transform: translate3d(38px, 105vh, 0) rotate(180deg); opacity: 0; }
+}
+@keyframes orb-pulse {
+  0%, 100% { opacity: .55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: .9; transform: translate(-50%, -50%) scale(1.12); }
+}
+@keyframes spark-blink {
+  0%, 100% { opacity: .35; transform: scale(.8) rotate(0); }
+  50% { opacity: 1; transform: scale(1.1) rotate(12deg); }
+}
 @media (prefers-reduced-motion: reduce) {
   .float-slow, .float-sword, .float-heart, .float-healing { animation: none; }
+  .download-orb, .snowflake, .pixel-spark { animation: none; }
 }

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, Droplets, Leaf, Menu, Recycle, Sparkles, TreePine, Users, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowUpRight, BookOpen, CloudSun, Download, Factory, Gamepad2, Globe2, Leaf, Menu, MonitorDown, PackageOpen, Snowflake, Sparkles, X } from 'lucide-react'
 
 const images = {
   penguin: '/images/penguin.png',
@@ -19,19 +19,20 @@ const team = [
 
 const navLinks = [['Início', '#inicio'], ['O jogo', '#sobre'], ['Personagem', '#personagem'], ['Nossa missão', '#missao'], ['Impacto ambiental', '#impacto'], ['Equipe', '#equipe']]
 
-function Header() {
+function Header({ downloadPage = false }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const mobileLinks = downloadPage ? [['Voltar ao site', '/']] : [...navLinks, ['Fazer Download', '/download']]
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[.07] bg-[#080a0e]/80 backdrop-blur-xl">
       <div className="section-wrap flex h-[74px] items-center justify-between">
-        <a href="#inicio" className="pixel text-[11px] text-white sm:text-sm">SNOW<span className="text-cyan-300">LANDS</span></a>
+        <a href={downloadPage ? '/' : '#inicio'} className="pixel text-[11px] text-white sm:text-sm">SNOW<span className="text-cyan-300">LANDS</span></a>
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map(([label, href]) => <a key={href} href={href} className="text-sm text-slate-300 transition hover:text-cyan-200">{label}</a>)}
+          {(downloadPage ? [['Voltar ao site', '/']] : navLinks).map(([label, href]) => <a key={href} href={href} className="text-sm text-slate-300 transition hover:text-cyan-200">{label}</a>)}
         </nav>
-        <a href="#sobre" className="hidden items-center rounded-full border border-cyan-200/30 px-5 py-2.5 text-xs font-bold text-cyan-100 transition hover:bg-cyan-200 hover:text-slate-950 md:inline-flex">Explorar <ArrowUpRight size={15} className="ml-2" /></a>
+        <a href={downloadPage ? '#download' : '/download'} className="hidden items-center rounded-full border border-cyan-200/30 px-5 py-2.5 text-xs font-bold text-cyan-100 transition hover:bg-cyan-200 hover:text-slate-950 md:inline-flex">Fazer Download <ArrowUpRight size={15} className="ml-2" /></a>
         <button onClick={() => setMenuOpen((open) => !open)} className="text-cyan-100 md:hidden" aria-label="Abrir menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
       </div>
-      {menuOpen && <nav className="section-wrap grid gap-4 pb-5 md:hidden">{navLinks.map(([label, href]) => <a key={href} onClick={() => setMenuOpen(false)} href={href} className="text-sm text-slate-200">{label}</a>)}</nav>}
+      {menuOpen && <nav className="section-wrap grid gap-4 pb-5 md:hidden">{mobileLinks.map(([label, href]) => <a key={href} onClick={() => setMenuOpen(false)} href={href} className="text-sm text-slate-200">{label}</a>)}</nav>}
     </header>
   )
 }
@@ -127,30 +128,37 @@ function MotionSection({ id, className = '', children }) {
   return <motion.section id={id} initial={reducedMotion ? false : { opacity: 0, y: 28 }} whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 0.65 }} className={className}>{children}</motion.section>
 }
 
-const pillars = [
-  { icon: Sparkles, title: 'Diversão e exploração', text: 'Exploração, desafios, evolução e descobertas formam uma experiência de jogo. A temática ambiental entra como parte da aventura, não como uma aula cansativa.' },
-  { icon: Leaf, title: 'Consciência ambiental', text: 'Desmatamento, poluição, descarte inadequado e preservação podem aparecer em cenários, objetivos e consequências das escolhas — como possibilidades futuras do projeto.' },
-  { icon: Users, title: 'Aprendizado que ultrapassa a tela', text: 'A experiência busca incentivar reflexões sobre preservação, consumo consciente e responsabilidade coletiva no cotidiano.' },
+const climateCards = [
+  { icon: CloudSun, title: 'O que está acontecendo?', text: 'Aquecimento global é o aumento duradouro da temperatura média do planeta. Ele ocorre principalmente porque atividades humanas elevam a concentração de gases de efeito estufa, que retêm mais calor na atmosfera.' },
+  { icon: Factory, title: 'De onde vêm esses gases?', text: 'A queima de carvão, petróleo e gás, o desmatamento e algumas atividades agropecuárias aumentam as emissões. O efeito de cada atividade se soma e altera o equilíbrio climático.' },
+  { icon: Snowflake, title: 'O que muda no planeta?', text: 'O aquecimento contribui para mudanças nos padrões de chuva e temperatura, derretimento de geleiras e impactos nos ecossistemas e nas espécies que dependem deles.' },
 ]
 
-const environmentalSituations = [
-  { icon: TreePine, title: 'Floresta ameaçada', problem: 'A remoção da vegetação pode comprometer habitats e a regeneração do ambiente.', consequence: 'A perda de abrigo e de diversidade pode desequilibrar o ecossistema.', action: 'Valorizar áreas preservadas e apoiar ações de recuperação da vegetação.', challenge: 'Recuperar uma área do mapa, proteger mudas e explorar sem destruir o habitat.' },
-  { icon: Recycle, title: 'Descarte inadequado', problem: 'Resíduos deixados em locais impróprios podem contaminar o ambiente e afetar animais.', consequence: 'O lixo pode se acumular e dificultar a vida das espécies e das comunidades.', action: 'Separar resíduos corretamente e reduzir o descarte desnecessário.', challenge: 'Encontrar resíduos no cenário e encaminhá-los aos destinos corretos.' },
-  { icon: Droplets, title: 'Ecossistema a preservar', problem: 'Cada ambiente depende do equilíbrio entre água, solo, plantas e animais.', consequence: 'Alterações em um elemento podem afetar todo o conjunto de relações.', action: 'Usar recursos com responsabilidade e respeitar os ciclos naturais.', challenge: 'Cumprir objetivos de proteção sem esgotar os recursos do cenário.' },
+const approachCards = [
+  { icon: Gamepad2, title: 'Desenvolvimento em 2D', text: 'Construímos SnowLands no GameMaker, criando um universo visual em pixel art e uma experiência interativa para apresentar o projeto.' },
+  { icon: Sparkles, title: 'Narrativa e personagens', text: 'O pinguim protagonista e o universo congelado aproximam o jogador da temática ambiental por meio de uma aventura, sem transformar o jogo em uma aula.' },
+  { icon: BookOpen, title: 'Curiosidade para refletir', text: 'A proposta é usar a exploração e a linguagem dos jogos para despertar perguntas sobre o ambiente e incentivar o jogador a conhecer melhor o aquecimento global.' },
 ]
 
 function Mission() {
-  return <MotionSection id="missao" className="relative overflow-hidden border-y border-white/[.06] bg-[#080a0e] py-28"><div className="section-wrap"><div className="mx-auto max-w-3xl text-center"><SectionTitle eyebrow="Nossa missão" title={<>ENTRETER.<br /><span className="text-cyan-300">CONSCIENTIZAR.</span><br />PRESERVAR.</>} text="SnowLands busca transformar temas ambientais em uma experiência interativa, acessível e interessante — conectando diversão, descoberta e responsabilidade coletiva." /><div className="mt-10 flex justify-center flex-wrap gap-3">{['Entreter', 'Conscientizar', 'Incentivar a preservação'].map((item) => <span key={item} className="rounded-full border border-cyan-200/20 bg-cyan-300/5 px-4 py-2 text-xs text-cyan-100">{item}</span>)}</div></div></div></MotionSection>
+  return <MotionSection id="missao" className="relative overflow-hidden border-y border-white/[.06] bg-[#080a0e] py-28"><div className="section-wrap"><SectionTitle eyebrow="01 — Qual o problema?" title={<>O CLIMA ESTÁ<br /><span className="text-cyan-300">MUDANDO.</span></>} text="O aquecimento global não é apenas um dia quente: é uma alteração persistente na temperatura média da Terra. O aumento dos gases de efeito estufa, provocado principalmente por atividades humanas, intensifica a retenção de calor na atmosfera." /><div className="mt-14 grid gap-5 md:grid-cols-3">{climateCards.map(({ icon: Icon, title, text }, index) => <motion.article key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .1 }} whileHover={{ y: -6 }} className="glass group rounded-2xl p-7 transition-colors hover:border-cyan-200/40"><div className="mb-7 grid h-12 w-12 place-items-center rounded-xl bg-cyan-300/10 text-cyan-200 transition group-hover:bg-cyan-300 group-hover:text-slate-950"><Icon size={22} /></div><h3 className="font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-7 text-slate-400">{text}</p></motion.article>)}</div><p className="mt-8 text-xs text-slate-500">Síntese baseada em materiais do <a className="text-cyan-200 hover:text-white" href="https://climate.nasa.gov/causes/" target="_blank" rel="noreferrer">NASA Climate Change</a> e do <a className="text-cyan-200 hover:text-white" href="https://www.ipcc.ch/report/ar6/syr/" target="_blank" rel="noreferrer">IPCC</a>.</p></div></MotionSection>
 }
 
 function Purpose() {
-  return <MotionSection id="proposito" className="border-b border-white/[.06] bg-[#0d1118] py-28"><div className="section-wrap"><SectionTitle eyebrow="A proposta do jogo" title={<>MAIS DO QUE UM JOGO,<br /><span className="text-cyan-300">UMA EXPERIÊNCIA.</span></>} text="O objetivo é unir diversão, exploração e conscientização ambiental sem perder o prazer de jogar." /><div className="mt-14 grid gap-5 md:grid-cols-3">{pillars.map(({ icon: Icon, title, text }, index) => <motion.article key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .1 }} whileHover={{ y: -8 }} className="glass group rounded-2xl p-7 transition-colors hover:border-cyan-200/40"><div className="mb-8 grid h-12 w-12 place-items-center rounded-xl bg-cyan-300/10 text-cyan-200 transition group-hover:bg-cyan-300 group-hover:text-slate-950"><Icon size={22} /></div><h3 className="font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-7 text-slate-400">{text}</p></motion.article>)}</div></div></MotionSection>
+  return <MotionSection id="proposito" className="border-b border-white/[.06] bg-[#0d1118] py-28"><div className="section-wrap"><SectionTitle eyebrow="02 — O que nós fizemos?" title={<>UMA AVENTURA<br /><span className="text-cyan-300">COM PROPÓSITO.</span></>} text="Desenvolvemos SnowLands como uma iniciativa de entretenimento associada à reflexão ambiental. O jogo apresenta um mundo congelado e convida o visitante a conhecer a relação entre a aventura e o aquecimento global, sem afirmar resultados de conscientização que ainda não foram medidos." /><div className="mt-10 flex flex-wrap gap-3"><span className="rounded-full border border-cyan-200/20 bg-cyan-300/5 px-4 py-2 text-xs text-cyan-100">Jogo 2D</span><span className="rounded-full border border-cyan-200/20 bg-cyan-300/5 px-4 py-2 text-xs text-cyan-100">Pixel art</span><span className="rounded-full border border-cyan-200/20 bg-cyan-300/5 px-4 py-2 text-xs text-cyan-100">Reflexão ambiental</span></div></div></MotionSection>
 }
 
 function Impact() {
-  const [selected, setSelected] = useState(environmentalSituations[0])
-  const reducedMotion = useReducedMotion()
-  return <MotionSection id="impacto" className="border-b border-white/[.06] bg-[#080a0e] py-28"><div className="section-wrap"><SectionTitle eyebrow="Impacto ambiental" title={<>SUAS ESCOLHAS<br /><span className="text-cyan-300">FAZEM A DIFERENÇA.</span></>} text="Escolha uma situação para explorar como um tema ambiental poderia ser traduzido em uma experiência dentro do SnowLands." /><div className="mt-14 grid gap-8 lg:grid-cols-[.8fr_1.2fr]"><div className="grid gap-3">{environmentalSituations.map((situation) => { const Icon = situation.icon; const active = situation.title === selected.title; return <motion.button key={situation.title} whileHover={{ x: 4 }} onClick={() => setSelected(situation)} className={`flex items-center gap-4 rounded-2xl border p-5 text-left transition ${active ? 'border-cyan-200/60 bg-cyan-300/10' : 'border-white/10 bg-white/[.02] hover:border-cyan-200/30'}`}><Icon size={22} className={active ? 'text-cyan-200' : 'text-slate-500'} /><span className="text-sm font-bold text-white">{situation.title}</span></motion.button> })}</div><motion.div key={selected.title} initial={reducedMotion ? false : { opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} className="glass rounded-3xl p-7 sm:p-9"><h3 className="text-xl font-bold text-white">{selected.title}</h3><div className="mt-7 grid gap-5 sm:grid-cols-2"><p className="text-sm leading-7 text-slate-400"><strong className="text-cyan-100">O problema:</strong><br />{selected.problem}</p><p className="text-sm leading-7 text-slate-400"><strong className="text-cyan-100">Possível consequência:</strong><br />{selected.consequence}</p><p className="text-sm leading-7 text-slate-400"><strong className="text-cyan-100">Uma atitude:</strong><br />{selected.action}</p><p className="text-sm leading-7 text-slate-400"><strong className="text-cyan-100">No jogo, poderia ser:</strong><br />{selected.challenge}</p></div><p className="mt-8 text-[11px] text-slate-500">Demonstração conceitual, sem estatísticas ou resultados reais.</p></motion.div></div></div></MotionSection>
+  return <MotionSection id="impacto" className="border-b border-white/[.06] bg-[#080a0e] py-28"><div className="section-wrap"><SectionTitle eyebrow="03 — Como fizemos?" title={<>A MENSAGEM<br /><span className="text-cyan-300">DENTRO DO JOGO.</span></>} text="Usamos o desenvolvimento de jogos para aproximar o público da temática. No GameMaker, reunimos universo visual, personagem, narrativa e exploração em uma experiência 2D de pixel art. Esses elementos apresentam a proposta do SnowLands e abrem espaço para a curiosidade e a reflexão sobre o meio ambiente." /><div className="mt-14 grid gap-5 md:grid-cols-3">{approachCards.map(({ icon: Icon, title, text }, index) => <motion.article key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .1 }} whileHover={{ y: -6 }} className="glass group rounded-2xl p-7 transition-colors hover:border-cyan-200/40"><div className="mb-7 grid h-12 w-12 place-items-center rounded-xl bg-cyan-300/10 text-cyan-200 transition group-hover:bg-cyan-300 group-hover:text-slate-950"><Icon size={22} /></div><h3 className="font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-7 text-slate-400">{text}</p></motion.article>)}</div></div></MotionSection>
+}
+
+function Importance() {
+  const points = [
+    { icon: Globe2, title: 'Entender para agir', text: 'Compreender as mudanças climáticas ajuda a reconhecer riscos, avaliar informações e perceber como escolhas humanas influenciam o ambiente.' },
+    { icon: Leaf, title: 'Ecossistemas conectados', text: 'Geleiras, florestas, oceanos, animais e comunidades fazem parte de sistemas interdependentes que enfrentam alterações com o aquecimento do planeta.' },
+    { icon: Gamepad2, title: 'Jogos como apoio', text: 'Um jogo não substitui a educação científica, mas pode ser uma ferramenta complementar para despertar interesse, facilitar conversas e estimular a busca por conhecimento.' },
+  ]
+  return <MotionSection className="border-b border-white/[.06] bg-[#0d1118] py-28"><div className="section-wrap"><SectionTitle eyebrow="04 — Por que isso importa?" title={<>CONHECER O PROBLEMA<br /><span className="text-cyan-300">MUDA A CONVERSA.</span></>} text="A conscientização sobre o aquecimento global importa porque as mudanças climáticas afetam ecossistemas, comunidades e o futuro do planeta. Valorizar a ciência e compreender esses riscos é um passo para tomar decisões mais responsáveis." /><div className="mt-14 grid gap-5 md:grid-cols-3">{points.map(({ icon: Icon, title, text }, index) => <motion.article key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .1 }} whileHover={{ y: -6 }} className="glass group rounded-2xl p-7 transition-colors hover:border-cyan-200/40"><div className="mb-7 grid h-12 w-12 place-items-center rounded-xl bg-cyan-300/10 text-cyan-200 transition group-hover:bg-cyan-300 group-hover:text-slate-950"><Icon size={22} /></div><h3 className="font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-7 text-slate-400">{text}</p></motion.article>)}</div><div className="mt-10 rounded-2xl border border-cyan-200/15 bg-cyan-300/5 p-6"><p className="text-sm leading-7 text-slate-300">SnowLands busca unir entretenimento e reflexão ambiental, incentivando os jogadores a conhecerem melhor o aquecimento global por meio de uma experiência interativa. A iniciativa é educativa em sua proposta; seus resultados de conscientização não foram medidos pela equipe.</p><p className="mt-4 text-xs leading-6 text-slate-500">Para aprofundar: <a className="text-cyan-200 hover:text-white" href="https://clima.inpe.br/" target="_blank" rel="noreferrer">INPE</a>, <a className="text-cyan-200 hover:text-white" href="https://climate.nasa.gov/" target="_blank" rel="noreferrer">NASA Climate Change</a> e <a className="text-cyan-200 hover:text-white" href="https://www.ipcc.ch/report/ar6/syr/" target="_blank" rel="noreferrer">IPCC</a>.</p></div></div></MotionSection>
 }
 
 function Team() {
@@ -158,10 +166,130 @@ function Team() {
   return <section id="equipe" className="border-t border-white/[.06] bg-[#0d1118] py-28"><div className="section-wrap"><SectionTitle eyebrow="Quem está por trás do projeto" title={<>NOSSA<br />EQUIPE</>} text="Quatro integrantes, funções e contribuições que formam o time do SnowLands." /><div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{team.map((person, index) => <motion.article key={person.number} initial={reducedMotion ? false : { opacity: 0, y: 22 }} whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.5, delay: index * 0.1 }} whileHover={reducedMotion ? undefined : { y: -6, boxShadow: '0 18px 38px rgba(0, 0, 0, .28)' }} className="group overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#111923]/80 shadow-xl shadow-black/10 backdrop-blur-md transition-[border-color,transform,box-shadow] duration-300 hover:border-white/25 motion-reduce:transition-none"><div className={`h-1 bg-gradient-to-r ${person.accent}`} /><div className={`relative aspect-[4/5] overflow-hidden bg-gradient-to-br ${person.tone} p-3 sm:aspect-[5/6]`}><div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,.12),transparent_55%)]" /><img src={person.file} alt={`Fotografia do integrante ${person.number}`} className="relative h-full w-full rounded-[1rem] object-cover object-center transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none" /><span className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-full border border-white/25 bg-[#111923]/75 text-xs font-bold tracking-wider text-white/90 backdrop-blur-sm">{person.number}</span></div><div className="p-5"><h3 className="text-base font-bold tracking-wide text-white">Integrante {person.number}</h3><p className="mt-1 text-[11px] uppercase tracking-[.18em] text-slate-400">Funções no projeto</p><div className="mt-5 flex flex-wrap gap-2">{person.roles.map((role) => <span key={role} className="rounded-full border border-white/10 bg-white/[.06] px-2.5 py-1.5 text-[10px] leading-4 text-slate-300 transition-colors duration-300 group-hover:border-white/20 group-hover:text-white motion-reduce:transition-none">{role}</span>)}</div></div></motion.article>)}</div></div></section>
 }
 
-function Footer() {
-  return <footer className="border-t border-white/[.07] bg-[#080a0e] py-9"><div className="section-wrap flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left"><span className="pixel text-xs text-white">SNOW<span className="text-cyan-300">LANDS</span></span><p className="text-xs text-slate-500">Projeto desenvolvido como Trabalho de Conclusão de Curso.</p><a href="#inicio" className="text-xs text-cyan-200 hover:text-white">Voltar ao topo ↑</a></div></footer>
+function Footer({ downloadPage = false }) {
+  return <footer className="border-t border-white/[.07] bg-[#080a0e] py-9"><div className="section-wrap flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left"><span className="pixel text-xs text-white">SNOW<span className="text-cyan-300">LANDS</span></span><p className="text-xs text-slate-500">Projeto desenvolvido como Trabalho de Conclusão de Curso.</p><a href={downloadPage ? '#topo-download' : '#inicio'} className="text-xs text-cyan-200 hover:text-white">Voltar ao topo ↑</a></div></footer>
+}
+
+const snowflakes = [
+  { left: '7%', delay: '0s', duration: '12s', size: '8px' },
+  { left: '18%', delay: '3s', duration: '15s', size: '5px' },
+  { left: '31%', delay: '7s', duration: '13s', size: '7px' },
+  { left: '47%', delay: '1s', duration: '17s', size: '4px' },
+  { left: '63%', delay: '5s', duration: '14s', size: '8px' },
+  { left: '78%', delay: '2s', duration: '16s', size: '5px' },
+  { left: '91%', delay: '8s', duration: '12s', size: '6px' },
+]
+
+const installationSteps = [
+  { number: '01', title: 'Baixe o jogo', text: 'Clique no botão de download e aguarde o arquivo ZIP ser baixado.', icon: Download },
+  { number: '02', title: 'Extraia os arquivos', text: 'Extraia todo o conteúdo do arquivo ZIP para uma pasta no computador.', icon: PackageOpen },
+  { number: '03', title: 'Inicie sua aventura', text: 'Abra o executável incluído na exportação do GameMaker para começar.', icon: Gamepad2 },
+]
+
+function DownloadPage() {
+  const reducedMotion = useReducedMotion()
+  return (
+    <>
+      <Header downloadPage />
+      <main id="topo-download" className="download-page overflow-hidden">
+        <section className="download-hero relative flex min-h-screen items-center overflow-hidden pt-24">
+          <div className="dark-grid absolute inset-0 opacity-60" />
+          <div className="download-orb absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/10 blur-[120px]" />
+          <div className="snowfall pointer-events-none absolute inset-0" aria-hidden="true">
+            {snowflakes.map((flake) => <span key={flake.left} className="snowflake" style={{ left: flake.left, animationDelay: flake.delay, animationDuration: flake.duration, width: flake.size, height: flake.size }} />)}
+          </div>
+          <div className="section-wrap relative z-10 grid w-full items-center gap-12 py-20 lg:grid-cols-[.9fr_1.1fr]">
+            <motion.div initial={reducedMotion ? false : { opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="max-w-xl">
+              <p className="pixel text-[10px] leading-5 text-cyan-300 sm:text-xs">UMA NOVA AVENTURA COMEÇA AQUI</p>
+              <h1 className="pixel mt-7 text-3xl leading-[1.65] text-white sm:text-5xl">SNOW<span className="text-cyan-300">LANDS</span></h1>
+              <p className="mt-7 max-w-lg text-lg leading-8 text-slate-300">Prepare-se para explorar um mundo congelado em uma aventura 2D cheia de descobertas.</p>
+              <div className="mt-9 flex flex-wrap items-center gap-4">
+                <a href="#download" className="download-button inline-flex items-center gap-3 rounded-xl bg-cyan-300 px-6 py-4 text-xs font-extrabold text-slate-950 shadow-[0_0_30px_rgba(103,232,249,.25)] transition hover:-translate-y-1 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white">BAIXAR SNOWLANDS <ArrowDown size={17} /></a>
+                <span className="text-xs text-slate-500">Pacote de distribuição do jogo</span>
+              </div>
+            </motion.div>
+            <motion.div initial={reducedMotion ? false : { opacity: 0, scale: .88 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .8, delay: .12 }} className="relative mx-auto w-full max-w-[500px]">
+              <div className="download-hero-frame absolute inset-[10%] rounded-full bg-cyan-300/10 blur-3xl" />
+              <div className={`penguin-stage relative mx-auto aspect-square w-[min(80vw,460px)] ${reducedMotion ? '' : 'float-slow'}`}>
+                <div className="pixel-spark absolute left-[12%] top-[20%] text-cyan-200">✦</div>
+                <div className="pixel-spark absolute right-[14%] top-[31%] text-blue-200">✧</div>
+                <div className="absolute inset-[8%] rounded-full border border-cyan-200/10 bg-[#0b1622]/70 shadow-[inset_0_0_60px_rgba(93,220,255,.1)]" />
+                <img src={images.penguin} alt="Pinguim protagonista de SnowLands" className="pixel-art relative z-10 h-full w-full object-contain p-[12%] drop-shadow-[0_24px_30px_rgba(0,0,0,.4)]" />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <MotionSection id="aventura" className="border-y border-white/[.06] bg-[#0d1118] py-24">
+          <div className="section-wrap grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+            <div>
+              <SectionTitle eyebrow="Conheça a aventura" title={<>UM PEQUENO<br /><span className="text-cyan-300">EXPLORADOR.</span></>} text="Em SnowLands, um pinguim protagonista atravessa um universo gelado em busca de descobertas. A proposta do projeto combina aventura em pixel art com uma reflexão sobre cuidado e preservação ambiental." />
+              <div className="mt-8 flex items-center gap-3 text-xs text-cyan-100"><Sparkles size={16} /> Uma jornada para descobrir e preservar</div>
+            </div>
+            <div className="relative grid min-h-[310px] place-items-center overflow-hidden rounded-3xl border border-cyan-200/15 bg-[#09131f] p-8">
+              <div className="dark-grid absolute inset-0 opacity-60" />
+              <img src={images.penguinSword} alt="Pinguim de SnowLands com espada" className="pixel-art relative z-10 h-64 w-full object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,.45)]" />
+              <span className="absolute bottom-5 left-5 text-[10px] uppercase tracking-[.25em] text-slate-500">Arte do projeto</span>
+            </div>
+          </div>
+        </MotionSection>
+
+        <MotionSection className="bg-[#080a0e] py-24">
+          <div className="section-wrap">
+            <SectionTitle eyebrow="Experiência de jogo" title={<>ARTE PARA<br /><span className="text-cyan-300">EXPLORAR.</span></>} text="Conheça alguns elementos visuais do universo de SnowLands. As imagens abaixo são artes do projeto, não capturas de gameplay." />
+            <div className="mt-12 grid gap-5 md:grid-cols-[1.25fr_.75fr]">
+              <div className="game-art-card relative min-h-[290px] overflow-hidden rounded-3xl border border-white/10 bg-[#101b29] p-7">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_35%,rgba(76,201,240,.2),transparent_35%)]" />
+                <img src={images.penguin} alt="Arte do pinguim protagonista" className="pixel-art relative z-10 mx-auto h-64 w-full object-contain" />
+                <span className="absolute bottom-5 left-6 text-[10px] uppercase tracking-[.25em] text-cyan-100/70">Protagonista</span>
+              </div>
+              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-1">
+                <div className="game-art-card flex min-h-[135px] items-center justify-between rounded-3xl border border-white/10 bg-[#101b29] p-6">
+                  <div><p className="pixel text-[9px] text-cyan-100">EQUIPAMENTO</p><p className="mt-2 text-sm text-slate-400">Itens da aventura</p></div>
+                  <img src={images.sword} alt="Espada de SnowLands" className="pixel-art h-24 w-24 object-contain" />
+                </div>
+                <div className="game-art-card flex min-h-[135px] items-center justify-between rounded-3xl border border-white/10 bg-[#101b29] p-6">
+                  <div><p className="pixel text-[9px] text-cyan-100">DETALHES</p><p className="mt-2 text-sm text-slate-400">Pixel art original</p></div>
+                  <div className="flex gap-2"><img src={images.heart} alt="Ícone de coração" className="pixel-art h-12 w-12 object-contain" /><img src={images.healing} alt="Item de cura" className="pixel-art h-12 w-12 object-contain" /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+
+        <MotionSection id="download" className="download-section relative border-y border-cyan-200/10 bg-[#0d1118] py-28">
+          <div className="section-wrap relative z-10">
+            <SectionTitle eyebrow="O momento da partida" title={<>BAIXE O<br /><span className="text-cyan-300">SNOWLANDS.</span></>} text="Baixe o pacote oficial do jogo, exportado pelo GameMaker, e prepare-se para iniciar sua aventura." />
+            <div className="mx-auto mt-12 max-w-xl">
+              <div className="download-card glass relative overflow-hidden rounded-3xl p-7 text-center sm:p-10">
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-cyan-300 to-transparent" />
+                <div className="mx-auto grid h-20 w-20 place-items-center rounded-2xl border border-cyan-200/20 bg-cyan-300/10 text-cyan-200 shadow-[0_0_30px_rgba(103,232,249,.12)]"><MonitorDown size={34} /></div>
+                <h3 className="pixel mt-7 text-sm leading-7 text-white">SNOW<span className="text-cyan-300">LANDS</span></h3>
+                <div className="mt-6 grid gap-3 border-y border-white/10 py-5 text-left text-xs sm:grid-cols-2">
+                  <p><span className="text-slate-500">Formato</span><br /><strong className="text-slate-200">ZIP do jogo exportado</strong></p>
+                  <p><span className="text-slate-500">Plataforma</span><br /><strong className="text-slate-200">Conforme exportação oficial</strong></p>
+                </div>
+                <a href="/downloads/SnowLands.zip" download="SnowLands.zip" className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-cyan-300 px-6 py-4 text-xs font-extrabold text-slate-950 shadow-[0_0_30px_rgba(103,232,249,.18)] transition hover:-translate-y-1 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white" aria-describedby="download-status"><Download size={17} /> BAIXAR JOGO</a>
+                <p id="download-status" className="mt-4 text-xs leading-6 text-slate-400">Pacote exportado do GameMaker em <code className="text-cyan-200">public/downloads/SnowLands.zip</code>.</p>
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+
+        <MotionSection className="bg-[#080a0e] py-24">
+          <div className="section-wrap">
+            <SectionTitle eyebrow="Como instalar" title={<>TRÊS PASSOS<br /><span className="text-cyan-300">PARA COMEÇAR.</span></>} text="Quando o pacote estiver disponível, siga estas etapas para iniciar a sua aventura." />
+            <div className="mt-12 grid gap-4 md:grid-cols-3">{installationSteps.map(({ number, title, text, icon: Icon }, index) => <motion.article key={number} whileHover={reducedMotion ? undefined : { y: -6 }} transition={{ duration: .2 }} className="glass rounded-2xl p-6"><div className="flex items-center justify-between"><span className="pixel text-xs text-cyan-300">{number}</span><Icon size={20} className="text-cyan-200" /></div><h3 className="mt-8 font-bold text-white">{title}</h3><p className="mt-3 text-sm leading-7 text-slate-400">{text}</p></motion.article>)}</div>
+            <div className="mt-8 flex gap-3 rounded-2xl border border-cyan-200/10 bg-cyan-300/5 p-5 text-xs leading-6 text-slate-400"><ArrowLeft size={16} className="mt-1 shrink-0 text-cyan-200" /> A compatibilidade depende do formato escolhido na exportação oficial do GameMaker. Nenhum sistema operacional é prometido antes dessa confirmação.</div>
+          </div>
+        </MotionSection>
+      </main>
+      <Footer downloadPage />
+    </>
+  )
 }
 
 export default function App() {
-  return <><Header /><main><AdventureScene /><About /><Purpose /><Mission /><Impact /><Team /></main><Footer /></>
+  if (window.location.pathname.replace(/\/$/, '') === '/download') return <DownloadPage />
+  return <><Header /><main><AdventureScene /><About /><Purpose /><Mission /><Impact /><Importance /><Team /></main><Footer /></>
 }
