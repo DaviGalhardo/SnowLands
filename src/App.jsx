@@ -2,34 +2,37 @@ import { useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, ArrowLeft, ArrowUpRight, BookOpen, CloudSun, Download, Factory, Gamepad2, Globe2, Leaf, Menu, MonitorDown, PackageOpen, Snowflake, Sparkles, X } from 'lucide-react'
 
+const baseUrl = import.meta.env.BASE_URL
+const downloadPageUrl = `${baseUrl}download`
+
 const images = {
-  penguin: '/images/penguin.png',
-  penguinSword: '/images/penguin-espada.png',
-  sword: '/images/sword.png',
-  heart: '/images/heart.png',
-  healing: '/images/healing-item.png',
+  penguin: `${baseUrl}images/penguin.png`,
+  penguinSword: `${baseUrl}images/penguin-espada.png`,
+  sword: `${baseUrl}images/sword.png`,
+  heart: `${baseUrl}images/heart.png`,
+  healing: `${baseUrl}images/healing-item.png`,
 }
 
 const team = [
-  { number: '01', file: '/images/team/integrante-1.jpeg', tone: 'from-[#a77d83]/45 via-[#5f5368]/35 to-[#1b202d]', accent: 'from-[#c48e93] via-[#a994b8] to-[#829bb5]', roles: ['História', 'Game Designer', 'Roteirista e Designer de Narrativa', 'Programador'] },
-  { number: '02', file: '/images/team/integrante-2.jpeg', tone: 'from-[#9aa4c0]/45 via-[#64738b]/35 to-[#19232e]', accent: 'from-[#9da8c2] via-[#8bb1b2] to-[#b4b28b]', roles: ['Programador', 'Produtor', 'Analista de Qualidade', 'Marketing e Community Manager'] },
-  { number: '03', file: '/images/team/integrante-3.jpeg', tone: 'from-[#8cae9c]/45 via-[#637f78]/35 to-[#18262a]', accent: 'from-[#91bda5] via-[#9ca9bb] to-[#b99cae]', roles: ['Artista Gráfico', 'Roteirista', 'Sound Designer'] },
-  { number: '04', file: '/images/team/integrante-4.jpeg', tone: 'from-[#b2a378]/45 via-[#817b76]/35 to-[#24272d]', accent: 'from-[#c3a982] via-[#b69ca7] to-[#9da8bd]', roles: ['Artista Gráfico', 'Roteirista', 'Sound Designer'] },
+  { number: '01', file: `${baseUrl}images/team/integrante-1.jpeg`, tone: 'from-[#a77d83]/45 via-[#5f5368]/35 to-[#1b202d]', accent: 'from-[#c48e93] via-[#a994b8] to-[#829bb5]', roles: ['História', 'Game Designer', 'Roteirista e Designer de Narrativa', 'Programador'] },
+  { number: '02', file: `${baseUrl}images/team/integrante-2.jpeg`, tone: 'from-[#9aa4c0]/45 via-[#64738b]/35 to-[#19232e]', accent: 'from-[#9da8c2] via-[#8bb1b2] to-[#b4b28b]', roles: ['Programador', 'Produtor', 'Analista de Qualidade', 'Marketing e Community Manager'] },
+  { number: '03', file: `${baseUrl}images/team/integrante-3.jpeg`, tone: 'from-[#8cae9c]/45 via-[#637f78]/35 to-[#18262a]', accent: 'from-[#91bda5] via-[#9ca9bb] to-[#b99cae]', roles: ['Artista Gráfico', 'Roteirista', 'Sound Designer'] },
+  { number: '04', file: `${baseUrl}images/team/integrante-4.jpeg`, tone: 'from-[#b2a378]/45 via-[#817b76]/35 to-[#24272d]', accent: 'from-[#c3a982] via-[#b69ca7] to-[#9da8bd]', roles: ['Artista Gráfico', 'Roteirista', 'Sound Designer'] },
 ]
 
 const navLinks = [['Início', '#inicio'], ['O jogo', '#sobre'], ['Personagem', '#personagem'], ['Nossa missão', '#missao'], ['Impacto ambiental', '#impacto'], ['Equipe', '#equipe']]
 
 function Header({ downloadPage = false }) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const mobileLinks = downloadPage ? [['Voltar ao site', '/']] : [...navLinks, ['Fazer Download', '/download']]
+  const mobileLinks = downloadPage ? [['Voltar ao site', baseUrl]] : [...navLinks, ['Fazer Download', downloadPageUrl]]
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[.07] bg-[#080a0e]/80 backdrop-blur-xl">
       <div className="section-wrap flex h-[74px] items-center justify-between">
-        <a href={downloadPage ? '/' : '#inicio'} className="pixel text-[11px] text-white sm:text-sm">SNOW<span className="text-cyan-300">LANDS</span></a>
+        <a href={downloadPage ? baseUrl : '#inicio'} className="pixel text-[11px] text-white sm:text-sm">SNOW<span className="text-cyan-300">LANDS</span></a>
         <nav className="hidden items-center gap-8 md:flex">
-          {(downloadPage ? [['Voltar ao site', '/']] : navLinks).map(([label, href]) => <a key={href} href={href} className="text-sm text-slate-300 transition hover:text-cyan-200">{label}</a>)}
+          {(downloadPage ? [['Voltar ao site', baseUrl]] : navLinks).map(([label, href]) => <a key={href} href={href} className="text-sm text-slate-300 transition hover:text-cyan-200">{label}</a>)}
         </nav>
-        <a href={downloadPage ? '#download' : '/download'} className="hidden items-center rounded-full border border-cyan-200/30 px-5 py-2.5 text-xs font-bold text-cyan-100 transition hover:bg-cyan-200 hover:text-slate-950 md:inline-flex">Fazer Download <ArrowUpRight size={15} className="ml-2" /></a>
+        <a href={downloadPage ? '#download' : downloadPageUrl} className="hidden items-center rounded-full border border-cyan-200/30 px-5 py-2.5 text-xs font-bold text-cyan-100 transition hover:bg-cyan-200 hover:text-slate-950 md:inline-flex">Fazer Download <ArrowUpRight size={15} className="ml-2" /></a>
         <button onClick={() => setMenuOpen((open) => !open)} className="text-cyan-100 md:hidden" aria-label="Abrir menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
       </div>
       {menuOpen && <nav className="section-wrap grid gap-4 pb-5 md:hidden">{mobileLinks.map(([label, href]) => <a key={href} onClick={() => setMenuOpen(false)} href={href} className="text-sm text-slate-200">{label}</a>)}</nav>}
@@ -269,7 +272,7 @@ function DownloadPage() {
                   <p><span className="text-slate-500">Formato</span><br /><strong className="text-slate-200">ZIP do jogo exportado</strong></p>
                   <p><span className="text-slate-500">Plataforma</span><br /><strong className="text-slate-200">Conforme exportação oficial</strong></p>
                 </div>
-                <a href="/downloads/SnowLands.zip" download="SnowLands.zip" className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-cyan-300 px-6 py-4 text-xs font-extrabold text-slate-950 shadow-[0_0_30px_rgba(103,232,249,.18)] transition hover:-translate-y-1 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white" aria-describedby="download-status"><Download size={17} /> BAIXAR JOGO</a>
+                <a href={`${baseUrl}downloads/SnowLands.zip`} download="SnowLands.zip" className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-cyan-300 px-6 py-4 text-xs font-extrabold text-slate-950 shadow-[0_0_30px_rgba(103,232,249,.18)] transition hover:-translate-y-1 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white" aria-describedby="download-status"><Download size={17} /> BAIXAR JOGO</a>
                 <p id="download-status" className="mt-4 text-xs leading-6 text-slate-400">Pacote exportado do GameMaker em <code className="text-cyan-200">public/downloads/SnowLands.zip</code>.</p>
               </div>
             </div>
@@ -290,6 +293,6 @@ function DownloadPage() {
 }
 
 export default function App() {
-  if (window.location.pathname.replace(/\/$/, '') === '/download') return <DownloadPage />
+  if (window.location.pathname.replace(/\/$/, '') === downloadPageUrl) return <DownloadPage />
   return <><Header /><main><AdventureScene /><About /><Purpose /><Mission /><Impact /><Importance /><Team /></main><Footer /></>
 }
